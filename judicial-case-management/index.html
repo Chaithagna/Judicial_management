@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Judicial Case Management System</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar with Role-Based Login/Register -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-gavel me-2"></i>
+            JusticeFlow
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="#home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#features">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+                <!-- Login Dropdown -->
+                <li class="nav-item dropdown ms-lg-3">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="loginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="loginDropdown">
+                        <li><h6 class="dropdown-header">Select your role</h6></li>
+                        <li><a class="dropdown-item" href="#" onclick="showJudgeLogin()">
+                            <i class="fas fa-gavel me-2" style="color: #4A6FA5;"></i>Judge Login
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showLawyerLogin()">
+                            <i class="fas fa-user-graduate me-2" style="color: #6B8C6B;"></i>Lawyer Login
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showClientLogin()">
+                            <i class="fas fa-user me-2" style="color: #C47A5A;"></i>Client Login
+                        </a></li>
+                    </ul>
+                </li>
+                <!-- Register Dropdown -->
+                <li class="nav-item dropdown">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="registerDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-plus me-2"></i>Register
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="registerDropdown">
+                        <li><h6 class="dropdown-header">Register as</h6></li>
+                        <li><a class="dropdown-item" href="#" onclick="showJudgeRegister()">
+                            <i class="fas fa-gavel me-2" style="color: #4A6FA5;"></i>Judge
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showLawyerRegister()">
+                            <i class="fas fa-user-graduate me-2" style="color: #6B8C6B;"></i>Lawyer
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showClientRegister()">
+                            <i class="fas fa-user me-2" style="color: #C47A5A;"></i>Client
+                        </a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Add spacing to prevent content from hiding under fixed navbar -->
+<div style="height: 80px;"></div>
+<!-- Add spacing to prevent content from hiding under fixed navbar -->
+<div style="height: 80px;"></div>
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6 hero-content">
+                    <h1 class="display-4 fw-bold mb-4">
+                        Streamlining Justice Through Technology
+                    </h1>
+                    <p class="lead mb-4">
+                        "The law is the witness and external deposit of our moral life." 
+                        <br>- Oliver Wendell Holmes Jr.
+                    </p>
+                    <p class="mb-4">
+                        A comprehensive digital platform connecting judges, lawyers, and clients 
+                        for transparent and efficient judicial processes.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#portals" class="btn btn-primary btn-lg me-3">Get Started</a>
+                        <a href="#features" class="btn btn-outline-primary btn-lg">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+             		<img src="https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=820" 
+     alt="Judge with Gavel">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Portals Section -->
+    <section id="portals" class="portals-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Choose Your Portal</h2>
+                <p class="section-subtitle">Secure access for all judicial stakeholders</p>
+            </div>
+            <div class="row g-4">
+                <!-- Judge Portal -->
+                <div class="col-md-4">
+                    <div class="portal-card judge-card">
+                        <div class="portal-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <h3>Judge Portal</h3>
+                        <p>Highest security clearance for judicial officers. Manage cases, schedule hearings, and access case files.</p>
+                        <button class="btn btn-outline-primary w-100 mb-3" data-bs-toggle="modal" data-bs-target="#judgeLoginModal">
+                            Access Judge Portal
+                        </button>
+                        <div class="security-badge">
+                            <i class="fas fa-shield-alt"></i> Multi-factor authentication required
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lawyer Portal -->
+                <div class="col-md-4">
+                    <div class="portal-card lawyer-card">
+                        <div class="portal-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>Lawyer Portal</h3>
+                        <p>Professional tier with client management. Track cases, upload documents, and manage your practice.</p>
+                        <button class="btn btn-outline-primary w-100 mb-3" data-bs-toggle="modal" data-bs-target="#lawyerLoginModal">
+                            Access Lawyer Portal
+                        </button>
+                        <div class="security-badge">
+                            <i class="fas fa-id-card"></i> Bar association verification
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client Portal -->
+                <div class="col-md-4">
+                    <div class="portal-card client-card">
+                        <div class="portal-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Client Portal</h3>
+                        <p>Basic access for clients. Find lawyers, track your case status, and communicate securely.</p>
+                        <button class="btn btn-outline-primary w-100 mb-3" data-bs-toggle="modal" data-bs-target="#clientLoginModal">
+                            Access Client Portal
+                        </button>
+                        <div class="security-badge">
+                            <i class="fas fa-lock"></i> Secure personal access
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modals -->
+    <!-- Judge Login Modal -->
+    <div class="modal fade" id="judgeLoginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Judge Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="judgeLoginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Judge ID</label>
+                            <input type="text" class="form-control" placeholder="Enter your judge ID" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="Enter password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Authentication Code</label>
+                            <input type="text" class="form-control" placeholder="Enter 6-digit code" required>
+                            <small class="text-muted">Multi-factor authentication required</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" onclick="redirectToDashboard('judge')">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lawyer Login Modal -->
+    <div class="modal fade" id="lawyerLoginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Lawyer Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="lawyerLoginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Bar ID / Lawyer ID</label>
+                            <input type="text" class="form-control" placeholder="Enter your bar ID" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="Enter password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Specialization</label>
+                            <select class="form-select">
+                                <option>Criminal Law</option>
+                                <option>Civil Law</option>
+                                <option>Corporate Law</option>
+                                <option>Family Law</option>
+                                <option>Tax Law</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" onclick="redirectToDashboard('lawyer')">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Login Modal -->
+    <div class="modal fade" id="clientLoginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Client Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="clientLoginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Case Number (Optional)</label>
+                            <input type="text" class="form-control" placeholder="Enter case number if applicable">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="Enter password" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" onclick="redirectToDashboard('client')">Login</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="#" class="text-decoration-none">New user? Register here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Key Features</h2>
+                <p class="section-subtitle">Everything you need for efficient case management</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-balance-scale feature-icon"></i>
+                        <h4>Case Management</h4>
+                        <p>Real-time tracking of case status, hearings, and judgments</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-file-signature feature-icon"></i>
+                        <h4>Document Repository</h4>
+                        <p>Secure upload, storage, and access to legal documents</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-calendar-check feature-icon"></i>
+                        <h4>Automated Scheduling</h4>
+                        <p>Smart hearing scheduling with instant notifications</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt feature-icon"></i>
+                        <h4>Role-based Access</h4>
+                        <p>Strict data isolation and security protocols</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h4>Analytics Dashboard</h4>
+                        <p>Performance metrics and case resolution tracking</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-comments feature-icon"></i>
+                        <h4>Secure Communication</h4>
+                        <p>Encrypted messaging between all parties</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <h3 class="stat-number">40%</h3>
+                        <p>Reduction in inquiry calls</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <h3 class="stat-number">30%</h3>
+                        <p>Better communication</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <h3 class="stat-number">25%</h3>
+                        <p>Faster matching</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <h3 class="stat-number">100%</h3>
+                        <p>Data accuracy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-gavel me-2"></i>JusticeFlow</h5>
+                    <p>Streamlining judicial processes through technology for a more accessible legal system.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#portals">Portals</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="fas fa-envelope me-2"></i>support@justiceflow.com</p>
+                    <p><i class="fas fa-phone me-2"></i>+1 (555) 123-4567</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4">
+            <div class="text-center">
+                <p>&copy; 2024 JusticeFlow. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+</html>

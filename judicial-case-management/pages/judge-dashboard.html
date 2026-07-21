@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Judge Dashboard - JusticeFlow</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Judge Dashboard Specific Styles */
+        :root {
+            --judge-primary: #4A6FA5;
+            --judge-secondary: #6B8EB5;
+        }
+
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, var(--judge-primary), var(--judge-secondary));
+            color: white;
+            padding: 2rem 1rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s;
+        }
+
+        .sidebar .user-info {
+            text-align: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar .user-avatar {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--judge-primary);
+            border: 3px solid var(--accent-color);
+        }
+
+        .sidebar .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar .nav-link i {
+            width: 24px;
+            margin-right: 10px;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            background: var(--light-bg);
+        }
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            height: 100%;
+            border-left: 4px solid var(--judge-primary);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--judge-primary), var(--judge-secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--judge-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .card-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Schedule Table */
+        .schedule-table {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .schedule-table table {
+            margin: 0;
+        }
+
+        .schedule-table th {
+            border-top: none;
+            color: var(--judge-primary);
+            font-weight: 600;
+        }
+
+        .badge-hearing {
+            background: linear-gradient(135deg, var(--judge-primary), var(--judge-secondary));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .badge-urgent {
+            background: linear-gradient(135deg, #DC3545, #FF6B6B);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+                padding: 1rem 0.5rem;
+            }
+            
+            .sidebar .user-info h5,
+            .sidebar .user-info p,
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link {
+                justify-content: center;
+            }
+            
+            .sidebar .nav-link i {
+                margin: 0;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .quick-actions .btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--judge-primary), var(--judge-secondary));
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(74, 111, 165, 0.3);
+            transition: all 0.3s;
+        }
+
+        .quick-actions .btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-gavel"></i>
+                </div>
+                <h5>Hon. Robert Chen</h5>
+                <p>District Court Judge</p>
+                <small>Badge #JD-2024-001</small>
+            </div>
+            
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="#">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Case Files</span>
+                </a>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Hearings Schedule</span>
+                </a>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-users"></i>
+                    <span>Court Staff</span>
+                </a>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Judgments</span>
+                </a>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <hr class="mt-4" style="border-color: rgba(255,255,255,0.2);">
+                <a class="nav-link" href="../index.html">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Welcome back, Judge Chen</h2>
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge bg-danger">3</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar-day me-2"></i>
+                        <span id="currentDate"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <div class="card-value">24</div>
+                        <div class="card-label">Pending Cases</div>
+                        <small class="text-success">+3 from last week</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div class="card-value">12</div>
+                        <div class="card-label">Active Hearings</div>
+                        <small class="text-warning">5 today</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="card-value">156</div>
+                        <div class="card-label">Resolved Cases</div>
+                        <small class="text-success">+8 this month</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="card-value">94%</div>
+                        <div class="card-label">Clearance Rate</div>
+                        <small class="text-success">Above average</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Schedule -->
+            <div class="schedule-table mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>Today's Hearing Schedule</h4>
+                    <button class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus me-2"></i>Schedule New
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Case No.</th>
+                                <th>Case Title</th>
+                                <th>Type</th>
+                                <th>Lawyer</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>09:00 AM</td>
+                                <td>CR-2024-001</td>
+                                <td>State vs. Johnson</td>
+                                <td>Criminal</td>
+                                <td>Sarah Miller</td>
+                                <td><span class="badge-hearing">Scheduled</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>10:30 AM</td>
+                                <td>CV-2024-045</td>
+                                <td>Smith Property Dispute</td>
+                                <td>Civil</td>
+                                <td>James Wilson</td>
+                                <td><span class="badge-hearing">Scheduled</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>02:00 PM</td>
+                                <td>FM-2024-023</td>
+                                <td>Davis Custody Case</td>
+                                <td>Family</td>
+                                <td>Maria Garcia</td>
+                                <td><span class="badge-urgent">Urgent</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Case Files and Analytics -->
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <div class="schedule-table">
+                        <h4 class="mb-4">Recent Case Files</h4>
+                        <div class="list-group">
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">CR-2024-015 - State vs. Thompson</h6>
+                                    <small>Filed: 2 days ago | Lawyer: Robert Brown</small>
+                                </div>
+                                <span class="badge bg-warning">Under Review</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">CV-2024-089 - Anderson vs. Corporation</h6>
+                                    <small>Filed: 5 days ago | Lawyer: Emily Chen</small>
+                                </div>
+                                <span class="badge bg-info">Documents Pending</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">FM-2024-031 - Williams Divorce</h6>
+                                    <small>Filed: 1 week ago | Lawyer: David Kim</small>
+                                </div>
+                                <span class="badge bg-success">Ready for Hearing</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="schedule-table">
+                        <h4 class="mb-4">Performance Metrics</h4>
+                        <canvas id="performanceChart"></canvas>
+                        <div class="mt-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Avg. Resolution Time:</span>
+                                <strong>45 days</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Backlog:</span>
+                                <strong>8 cases</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Hearing Completion:</span>
+                                <strong>92%</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <button class="btn" data-bs-toggle="modal" data-bs-target="#quickActionModal">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- Quick Action Modal -->
+    <div class="modal fade" id="quickActionModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Quick Actions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="list-group">
+                        <button class="list-group-item list-group-item-action">
+                            <i class="fas fa-calendar-plus me-2"></i>Schedule New Hearing
+                        </button>
+                        <button class="list-group-item list-group-item-action">
+                            <i class="fas fa-file-pdf me-2"></i>Upload Judgment
+                        </button>
+                        <button class="list-group-item list-group-item-action">
+                            <i class="fas fa-users me-2"></i>View Court Calendar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Display current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Performance Chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Resolved', 'Pending', 'In Progress'],
+                datasets: [{
+                    data: [156, 24, 45],
+                    backgroundColor: [
+                        '#4A6FA5',
+                        '#FFC107',
+                        '#28A745'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    </script>
+</body>
+</html>

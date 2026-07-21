@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - JusticeFlow</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Client Dashboard Specific Styles */
+        :root {
+            --client-primary: #C47A5A;
+            --client-secondary: #D99F82;
+            --client-accent: #F4E4D7;
+        }
+
+        .client-dashboard {
+            background: linear-gradient(135deg, #fff5f0 0%, #fff 100%);
+            min-height: 100vh;
+        }
+
+        /* Welcome Header */
+        .welcome-header {
+            background: linear-gradient(135deg, var(--client-primary), var(--client-secondary));
+            color: white;
+            padding: 3rem 0;
+            border-radius: 0 0 50px 50px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(196, 122, 90, 0.3);
+        }
+
+        .client-avatar-large {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--client-primary);
+            border: 3px solid var(--client-accent);
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            border-radius: 50px;
+            padding: 0.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-section input {
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 50px;
+        }
+
+        .search-section input:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .search-section button {
+            background: var(--client-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+
+        .search-section button:hover {
+            background: var(--client-secondary);
+            transform: scale(1.05);
+        }
+
+        /* Lawyer Cards for Discovery */
+        .lawyer-discovery-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            height: 100%;
+            border: 1px solid #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lawyer-discovery-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(196, 122, 90, 0.15);
+        }
+
+        .lawyer-discovery-card .verified-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #28a745;
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+
+        .lawyer-discovery-card .rating {
+            color: #FFD700;
+        }
+
+        .lawyer-discovery-card .hourly-rate {
+            color: var(--client-primary);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        /* Case Status Cards */
+        .case-status-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--client-primary);
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .case-status-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(196, 122, 90, 0.1);
+        }
+
+        .case-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .case-timeline:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--client-accent);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -2.1rem;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--client-primary);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px var(--client-primary);
+        }
+
+        .timeline-item.completed:before {
+            background: #28a745;
+            box-shadow: 0 0 0 2px #28a745;
+        }
+
+        .timeline-item.pending:before {
+            background: #ffc107;
+            box-shadow: 0 0 0 2px #ffc107;
+        }
+
+        /* Communication Hub */
+        .message-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .message-card.lawyer {
+            background: var(--client-accent);
+            margin-left: 2rem;
+        }
+
+        .message-card.client {
+            margin-right: 2rem;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        /* Quick Actions */
+        .quick-action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .quick-action-card:hover {
+            background: var(--client-primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .quick-action-card:hover i,
+        .quick-action-card:hover h6 {
+            color: white !important;
+        }
+
+        /* Rating Stars */
+        .rating-stars {
+            color: #ddd;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .rating-stars .star.active {
+            color: #FFD700;
+        }
+
+        /* Appointment Scheduler */
+        .time-slot {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .time-slot:hover,
+        .time-slot.selected {
+            background: var(--client-primary);
+            color: white;
+            border-color: var(--client-primary);
+        }
+
+        /* Document Access */
+        .document-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .document-item:hover {
+            background: var(--client-accent);
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="client-dashboard">
+        <!-- Welcome Header -->
+        <div class="welcome-header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center">
+                            <div class="client-avatar-large me-3">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h2>Welcome back, John!</h2>
+                                <p class="mb-0">Client since 2023 | Case #CLT-2024-089</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <button class="btn btn-light" onclick="location.href='../index.html'">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Lawyer Search Section -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h3 class="mb-4">Find Your Legal Expert</h3>
+                    <div class="search-section d-flex">
+                        <input type="text" class="form-control" placeholder="Search by specialization, name, or location...">
+                        <button class="btn ms-2">
+                            <i class="fas fa-search me-2"></i>Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Content -->
+            <div class="row">
+                <!-- Left Column - Case Information -->
+                <div class="col-lg-8">
+                    <!-- Active Cases -->
+                    <div class="mb-4">
+                        <h4 class="mb-3">Your Active Cases</h4>
+                        <div class="case-status-card">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5>State vs. Johnson</h5>
+                                    <p class="text-muted mb-1">Case #CR-2024-001</p>
+                                    <p class="mb-2"><strong>Lawyer:</strong> Sarah Mitchell (Senior Criminal Defense)</p>
+                                </div>
+                                <span class="badge bg-warning">In Progress</span>
+                            </div>
+                            
+                            <!-- Case Timeline -->
+                            <div class="case-timeline mb-3">
+                                <div class="timeline-item completed">
+                                    <small class="text-muted">Feb 15, 2024</small>
+                                    <p class="mb-0">Case filed with court</p>
+                                </div>
+                                <div class="timeline-item completed">
+                                    <small class="text-muted">Feb 28, 2024</small>
+                                    <p class="mb-0">Initial hearing completed</p>
+                                </div>
+                                <div class="timeline-item pending">
+                                    <small class="text-muted">Mar 25, 2024 (Upcoming)</small>
+                                    <p class="mb-0">Evidence hearing - Court Room 3A</p>
+                                </div>
+                            </div>
+
+                            <!-- Next Hearing Alert -->
+                            <div class="alert alert-warning d-flex align-items-center">
+                                <i class="fas fa-exclamation-triangle me-3"></i>
+                                <div>
+                                    <strong>Next Hearing:</strong> March 25, 2024 at 09:00 AM
+                                </div>
+                                <button class="btn btn-sm btn-outline-warning ms-auto">
+                                    <i class="fas fa-bell"></i> Set Reminder
+                                </button>
+                            </div>
+
+                            <!-- Case Documents -->
+                            <h6 class="mt-3 mb-2">Case Documents</h6>
+                            <div class="document-item">
+                                <i class="fas fa-file-pdf text-danger me-3 fs-5"></i>
+                                <div class="flex-grow-1">
+                                    <strong>Evidence_001.pdf</strong>
+                                    <small class="text-muted d-block">Uploaded by lawyer on Mar 1, 2024</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="document-item">
+                                <i class="fas fa-file-pdf text-danger me-3 fs-5"></i>
+                                <div class="flex-grow-1">
+                                    <strong>Hearing_Notes_0228.pdf</strong>
+                                    <small class="text-muted d-block">Uploaded by court on Feb 28, 2024</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Communication Hub -->
+                    <div class="mb-4">
+                        <h4 class="mb-3">Messages with Your Lawyer</h4>
+                        <div class="case-status-card">
+                            <div class="message-card lawyer">
+                                <small class="message-time">Sarah Mitchell - Today, 10:30 AM</small>
+                                <p class="mb-0">I've filed the motion for evidence hearing. Please review the documents I've uploaded.</p>
+                            </div>
+                            <div class="message-card client">
+                                <small class="message-time">You - Today, 11:15 AM</small>
+                                <p class="mb-0">Thank you. I've reviewed them. Everything looks good.</p>
+                            </div>
+                            <div class="message-card lawyer">
+                                <small class="message-time">Sarah Mitchell - Today, 11:30 AM</small>
+                                <p class="mb-0">Great! I'll keep you updated on any developments.</p>
+                            </div>
+                            
+                            <!-- Message Input -->
+                            <div class="mt-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Type your message...">
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Lawyer Info & Quick Actions -->
+                <div class="col-lg-4">
+                    <!-- Current Lawyer Info -->
+                    <div class="lawyer-discovery-card mb-4">
+                        <div class="verified-badge">
+                            <i class="fas fa-check-circle me-1"></i>Verified
+                        </div>
+                        <div class="text-center">
+                            <div class="client-avatar-large mx-auto mb-3">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <h5>Sarah Mitchell</h5>
+                            <p class="text-muted">Senior Criminal Defense</p>
+                            <div class="rating mb-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="ms-2">4.8</span>
+                            </div>
+                            <div class="hourly-rate mb-2">$350/hour</div>
+                            <p class="mb-2"><i class="fas fa-briefcase me-2"></i>9+ Years Experience</p>
+                            <p class="mb-3"><i class="fas fa-trophy me-2"></i>142 Cases Won</p>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-calendar-alt me-2"></i>Schedule Appointment
+                                </button>
+                                <button class="btn btn-outline-primary">
+                                    <i class="fas fa-video me-2"></i>Request Video Call
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">Quick Actions</h5>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="quick-action-card">
+                                    <i class="fas fa-file-upload fs-2 mb-2" style="color: var(--client-primary);"></i>
+                                    <h6 class="mb-0">Upload Document</h6>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="quick-action-card">
+                                    <i class="fas fa-credit-card fs-2 mb-2" style="color: var(--client-primary);"></i>
+                                    <h6 class="mb-0">Make Payment</h6>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="quick-action-card">
+                                    <i class="fas fa-calendar-check fs-2 mb-2" style="color: var(--client-primary);"></i>
+                                    <h6 class="mb-0">View Schedule</h6>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="quick-action-card">
+                                    <i class="fas fa-star fs-2 mb-2" style="color: var(--client-primary);"></i>
+                                    <h6 class="mb-0">Rate Lawyer</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Appointments -->
+                    <div class="case-status-card">
+                        <h5 class="mb-3">Upcoming Appointments</h5>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Court Hearing</strong>
+                                    <p class="mb-0 text-muted">Mar 25, 2024 - 09:00 AM</p>
+                                </div>
+                                <span class="badge bg-primary">Confirmed</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Consultation</strong>
+                                    <p class="mb-0 text-muted">Mar 28, 2024 - 02:00 PM</p>
+                                </div>
+                                <span class="badge bg-warning">Pending</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary w-100 mt-2">
+                            <i class="fas fa-plus me-2"></i>Schedule New
+                        </button>
+                    </div>
+
+                    <!-- Billing Summary -->
+                    <div class="case-status-card mt-4">
+                        <h5 class="mb-3">Billing Summary</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Total Billed:</span>
+                            <strong>$4,550</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Paid:</span>
+                            <strong class="text-success">$3,500</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Outstanding:</span>
+                            <strong class="text-danger">$1,050</strong>
+                        </div>
+                        <div class="progress mb-3" style="height: 5px;">
+                            <div class="progress-bar bg-success" style="width: 77%"></div>
+                        </div>
+                        <button class="btn btn-success w-100">
+                            <i class="fas fa-credit-card me-2"></i>Pay Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lawyer Discovery Section (Additional Lawyers) -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h4 class="mb-4">Recommended Lawyers</h4>
+                </div>
+                <div class="col-md-4">
+                    <div class="lawyer-discovery-card">
+                        <div class="verified-badge">
+                            <i class="fas fa-check-circle me-1"></i>Verified
+                        </div>
+                        <div class="text-center">
+                            <div class="client-avatar-large mx-auto mb-3">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <h5>James Wilson</h5>
+                            <p class="text-muted">Civil Litigation</p>
+                            <div class="rating mb-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="ms-2">5.0</span>
+                            </div>
+                            <div class="hourly-rate mb-2">$400/hour</div>
+                            <button class="btn btn-outline-primary w-100">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="lawyer-discovery-card">
+                        <div class="verified-badge">
+                            <i class="fas fa-check-circle me-1"></i>Verified
+                        </div>
+                        <div class="text-center">
+                            <div class="client-avatar-large mx-auto mb-3">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <h5>Emily Chen</h5>
+                            <p class="text-muted">Corporate Law</p>
+                            <div class="rating mb-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="ms-2">4.7</span>
+                            </div>
+                            <div class="hourly-rate mb-2">$375/hour</div>
+                            <button class="btn btn-outline-primary w-100">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="lawyer-discovery-card">
+                        <div class="verified-badge">
+                            <i class="fas fa-check-circle me-1"></i>Verified
+                        </div>
+                        <div class="text-center">
+                            <div class="client-avatar-large mx-auto mb-3">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <h5>David Kim</h5>
+                            <p class="text-muted">Family Law</p>
+                            <div class="rating mb-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="ms-2">5.0</span>
+                            </div>
+                            <div class="hourly-rate mb-2">$325/hour</div>
+                            <button class="btn btn-outline-primary w-100">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rate Lawyer Modal -->
+    <div class="modal fade" id="rateLawyerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rate Your Lawyer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="rating-stars mb-3">
+                        <i class="far fa-star star" onclick="rateStar(1)"></i>
+                        <i class="far fa-star star" onclick="rateStar(2)"></i>
+                        <i class="far fa-star star" onclick="rateStar(3)"></i>
+                        <i class="far fa-star star" onclick="rateStar(4)"></i>
+                        <i class="far fa-star star" onclick="rateStar(5)"></i>
+                    </div>
+                    <textarea class="form-control mb-3" rows="3" placeholder="Write your review..."></textarea>
+                    <button class="btn btn-primary w-100" data-bs-dismiss="modal">Submit Review</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Rating stars functionality
+        function rateStar(rating) {
+            const stars = document.querySelectorAll('.rating-stars .star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('far');
+                    star.classList.add('fas', 'active');
+                } else {
+                    star.classList.remove('fas', 'active');
+                    star.classList.add('far');
+                }
+            });
+        }
+
+        // Time slot selection
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Appointment scheduling
+        function scheduleAppointment() {
+            const selectedSlot = document.querySelector('.time-slot.selected');
+            if (selectedSlot) {
+                alert(`Appointment scheduled for ${selectedSlot.textContent}`);
+            } else {
+                alert('Please select a time slot');
+            }
+        }
+
+        // Document viewing
+        document.querySelectorAll('.document-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const docName = this.querySelector('strong').textContent;
+                alert(`Opening document: ${docName}`);
+            });
+        });
+    </script>
+</body>
+</html>
